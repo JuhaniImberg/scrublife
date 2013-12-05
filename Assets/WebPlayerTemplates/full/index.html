@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" style="height:100%">
+	<head>
+		<title>%UNITY_WEB_NAME%</title>
+		<script type="text/javascript" src="http://webplayer.unity3d.com/download_webplayer-3.x/3.0/uo/UnityObject.js"></script>
+		<script type="text/javascript">
+			function GetUnity() {
+				if (typeof unityObject != "undefined") {
+					return unityObject.getObjectById("unityPlayer");
+				}
+				return null;
+			}
+			if (typeof unityObject != "undefined") {
+				var params = {
+					disableContextMenu: true
+				};
+				unityObject.embedUnity("unityPlayer", "%UNITY_WEB_PATH%", '100%', '100%', params);
+
+			}
+		</script>
+	</head>
+	<body style="background-color:#000;text-align:center;margin:0px;padding:0px;height:100%;">
+		<div class="content" style="display:inline;">
+			<div id="unityPlayer" style="display:inline;">
+				<div class="missing" style="display:inline;">
+					<a href="http://unity3d.com/webplayer/" title="Unity Web Player. Install now!">
+						<img alt="Unity Web Player. Install now!" src="http://webplayer.unity3d.com/installation/getunity.png" width="193" height="63" />
+					</a>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

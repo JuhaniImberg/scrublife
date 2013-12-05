@@ -257,6 +257,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lif: {fileID: 1961204752}
+  custom: {fileID: 11400000, guid: ccaa14a154395194b9c6dce6742af113, type: 2}
 --- !u!114 &1961204752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,7 +269,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57e9966aaecb41d4fa91b2fe528b968e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  period: .200000003
+  period: .330000013
   autorun: 1
   block: {fileID: 100000, guid: 43d2dc057dd529a438876e7553b57883, type: 2}
   poi: {fileID: 1825691193}
+  colortime: 10
+  rotationspeed: 2
+  tick: 0
+  aliveamount: 0

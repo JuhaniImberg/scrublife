@@ -3,24 +3,23 @@ using System.Collections;
 
 public class gui : MonoBehaviour {
 
-	
-	float guiWidth = 1280.0f;
-	float guiHeight = 720.0f;
-	Vector3 scale;
-
 	public life lif;
 
-	int height = 8;
-	int width = 8;
-	int size = 4;
+	int height = 16;
+	int width = 16;
+	int size = 2;
 
 	float zoom = 1f;
 
 	bool showgui = true;
 
+	float fps;
+
+	public GUISkin custom;
+
 	// Use this for initialization
 	void Start () {
-		StartLife();
+		this.StartLife();
 	}
 
 	void StartLife() {
@@ -45,19 +44,20 @@ public class gui : MonoBehaviour {
 		}
 
 		this.camera.fieldOfView = 60f*this.zoom;
+
+		this.fps = (1.0f/Time.deltaTime);
 	}
 
 	void OnGUI () {
 		if(!this.showgui)
 			return;
+		GUI.skin = custom;
 
-		scale.x = Screen.width/guiWidth;
-		scale.y = Screen.height/guiHeight;
-		scale.z = 1;
-		Matrix4x4 oldmatrix = GUI.matrix;
-		GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, scale);
-		
-		GUILayout.BeginArea(new Rect(0, 0, 280, 720), GUI.skin.GetStyle("Box"));
+		GUILayout.BeginArea(new Rect(5, 5, 280, 438), GUI.skin.GetStyle("Box"));
+
+		/* GENERATION */
+
+		GUILayout.Label("Generation", GUI.skin.customStyles[0]);
 
 		GUILayout.Label("Area "+this.width+"x"+this.height);
 		this.height = (int)GUILayout.HorizontalSlider((float)this.height, 4, 32);
@@ -70,21 +70,44 @@ public class gui : MonoBehaviour {
 			StartLife();
 		}
 
+		/* ANIMATION */
+		GUILayout.Space(10);
+		GUILayout.Label("Animation", GUI.skin.customStyles[0]);
+		
+		GUILayout.Label("Speed: ~"+(int)(1/(this.lif.period)+0.5)+" ticks a second");
+		this.lif.period = GUILayout.HorizontalSlider(this.lif.period, 1f, 0.1f);
+		
+		GUILayout.Label("Trail: "+cubescript.lifeticks+" ticks long");
+		cubescript.lifeticks = (int)GUILayout.HorizontalSlider((float)cubescript.lifeticks, 1f, 50f);
+
+		/* CAMERA */
+		GUILayout.Space(10);
+		GUILayout.Label("Camera", GUI.skin.customStyles[0]);
+
 		GUILayout.Label("Zoom");
 		this.zoom = GUILayout.HorizontalSlider(this.zoom, 3f, 0.1f);
 
-		GUILayout.Label("Speed: ~"+(int)(1/(this.lif.period)+0.5)+" ticks a second");
-		this.lif.period = GUILayout.HorizontalSlider(this.lif.period, 1f, 0.1f);
+		GUILayout.Label("Rotation speed");
+		this.lif.rotationspeed = GUILayout.HorizontalSlider(this.lif.rotationspeed, -16f, 16f);
 
-		GUILayout.Label("Trail: "+cubescript.lifeticks+" ticks long");
-		cubescript.lifeticks = (int)GUILayout.HorizontalSlider((float)cubescript.lifeticks, 1f, 50f);
+		GUILayout.Label("Color rotation speed");
+		this.lif.colortime = GUILayout.HorizontalSlider(this.lif.colortime, 1f, 60f);
 
 		if(GUILayout.Button("Hide GUI (S)")) {
 			this.showgui = !this.showgui;
 		}
 		
 		GUILayout.EndArea();
-		
-		GUI.matrix = oldmatrix;
+
+		GUILayout.BeginArea(new Rect(Screen.width-200, 5, 195, 100), GUI.skin.GetStyle("Box"));
+
+		GUILayout.Label("Stats", GUI.skin.customStyles[0]);
+
+		GUILayout.Label("~"+(int)this.fps+" Frames Per Second");
+		GUILayout.Label(this.lif.tick+" ticks of this life");
+		GUILayout.Label(this.lif.aliveamount+" cells alive");
+
+		GUILayout.EndArea();
+
 	}
 }

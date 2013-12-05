@@ -11,7 +11,7 @@ public class life : MonoBehaviour {
 	float size;
 
 	private float nextRun = 0f;
-	public float period = 0.2f;
+	public float period = 0.33f;
 
 	private float ver = 0f;
 
@@ -22,8 +22,14 @@ public class life : MonoBehaviour {
 
 	private bool running;
 
+	public float colortime = 10f;
+	public float rotationspeed = 2f;
+
+	public int tick;
+	public int aliveamount;
+
 	void Start () {
-		this.running = false;
+		this.running = true;
 	}
 
 	public void Initialize(int height, int width, float size) {
@@ -39,7 +45,8 @@ public class life : MonoBehaviour {
 				this.theotherstuff[i, j] = 0;
 			}
 		}
-		
+
+		this.tick = 0;
 		this.dirty = true;
 		this.running = true;
 	}
@@ -66,6 +73,16 @@ public class life : MonoBehaviour {
 		return count;
 	}
 
+	int Alive() {
+		int amount = 0;
+		for(int i = 0; i < this.height; i++) {
+			for(int j = 0; j < this.width; j++) {
+				amount += this.stuff[i, j];
+			}
+		}
+		return amount;
+	}
+
 	void RunLife () {
 		for(int i = 0; i < this.height; i++) {
 			for(int j = 0; j < this.width; j++) {
@@ -85,12 +102,14 @@ public class life : MonoBehaviour {
 			}
 		}
 		this.dirty = true;
+		this.tick++;
+		this.aliveamount = this.Alive();
 	}
 
 	void Update() {
 
 		this.transform.LookAt(poi.transform);
-		this.transform.Translate(Vector3.right * Time.deltaTime * 2);
+		this.transform.Translate(Vector3.right * Time.deltaTime * this.rotationspeed);
 
 	}
 
@@ -101,7 +120,7 @@ public class life : MonoBehaviour {
 		cubescript.lifespan = this.period;
 
 		if(this.autorun && Time.time > nextRun) {
-			Debug.Log(nextRun);
+			//Debug.Log(nextRun);
 			nextRun += period;
 			RunLife();
 		}
@@ -125,7 +144,70 @@ public class life : MonoBehaviour {
 			this.dirty = false;
 		}
 
-		this.camera.backgroundColor = UnityEditor.EditorGUIUtility.HSVToRGB( ((Time.time/60)%1f) ,1f,1f);
+		this.camera.backgroundColor = ColorFromHSV( (Time.time*this.colortime)%360, 1f, 1f);
 
+
+	}
+
+	public static Color ColorFromHSV(float h, float s, float v, float a = 1)
+	{
+		// no saturation, we can return the value across the board (grayscale)
+		if (s == 0)
+			return new Color(v, v, v, a);
+		
+		// which chunk of the rainbow are we in?
+		float sector = h / 60;
+		
+		// split across the decimal (ie 3.87 into 3 and 0.87)
+		int i = (int)sector;
+		float f = sector - i;
+		
+		float p = v * (1 - s);
+		float q = v * (1 - s * f);
+		float t = v * (1 - s * (1 - f));
+		
+		// build our rgb color
+		Color color = new Color(0, 0, 0, a);
+		
+		switch(i)
+		{
+		case 0:
+			color.r = v;
+			color.g = t;
+			color.b = p;
+			break;
+			
+		case 1:
+			color.r = q;
+			color.g = v;
+			color.b = p;
+			break;
+			
+		case 2:
+			color.r  = p;
+			color.g  = v;
+			color.b  = t;
+			break;
+			
+		case 3:
+			color.r  = p;
+			color.g  = q;
+			color.b  = v;
+			break;
+			
+		case 4:
+			color.r  = t;
+			color.g  = p;
+			color.b  = v;
+			break;
+			
+		default:
+			color.r  = v;
+			color.g  = p;
+			color.b  = q;
+			break;
+		}
+		
+		return color;
 	}
 }

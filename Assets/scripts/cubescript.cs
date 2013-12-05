@@ -10,7 +10,6 @@ public class cubescript : MonoBehaviour {
 	private Color endcolor;
 	private Color startcolor;
 	private float times = 0f;
-	private float times2 = 0f;
 
 	void Start () {
 		this.deathtime = Time.time + lifespan*lifeticks;
