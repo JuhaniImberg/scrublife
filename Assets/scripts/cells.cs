@@ -5,9 +5,10 @@ public class Cells
 {
 
 	public int[,] cells;
-	public string name;
-	public string author;
-	public string comment;
+	public string name = "";
+	public string author = "";
+	public string comment = "";
+	public int numofcells = 0;
 
 	public static string[] GetNames ()
 	{
@@ -82,6 +83,7 @@ public class Cells
 				if (tmpchars [j] == 'O')
 				{
 					data.cells [i, j] = 1;
+					data.numofcells++;
 				}
 			}
 		}

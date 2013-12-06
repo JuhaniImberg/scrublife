@@ -38,7 +38,7 @@ public class life : MonoBehaviour
 
 		this.selected = 0;
 		this.possible = new string[1 + this.all.Length];
-		this.possible [0] = "random";
+		this.possible [0] = "Random";
 		for (int i = 0; i < this.all.Length; i++)
 		{
 			this.possible [i + 1] = this.all [i].name;
@@ -48,6 +48,8 @@ public class life : MonoBehaviour
 	void Start ()
 	{
 		this.running = true;
+		//cubepool.block = this.block;
+		//cubepool.AddInitial();
 	}
 
 	public void Initialize (int height, int width, float size)
@@ -67,7 +69,7 @@ public class life : MonoBehaviour
 			}
 		}
 
-		if (this.possible [this.selected].Equals ("random"))
+		if (this.possible [this.selected].Equals ("Random"))
 		{
 			for (int i = 0; i < this.height; i++)
 			{
@@ -321,8 +323,13 @@ public class life : MonoBehaviour
 					if (stuff [i, j] > 0)
 					{
 						GameObject clone;
-						clone = Instantiate (block, new Vector3 ((j - 0.5f - (width / 2)) * this.size, this.ver, -(i - 0.5f - (height / 2)) * this.size), Quaternion.identity) as GameObject;
+						//clone = Instantiate (block, new Vector3 ((j - 0.5f - (width / 2)) * this.size, this.ver, -(i - 0.5f - (height / 2)) * this.size), Quaternion.identity) as GameObject;
+						//clone = PoolManager.Spawn("Cube");
+						clone = Instantiate(block) as GameObject;
+						//clone = cubepool.Get();
+						clone.transform.Translate(new Vector3 ((j - 0.5f - (width / 2)) * this.size, this.ver, -(i - 0.5f - (height / 2)) * this.size));
 						clone.transform.localScale *= this.size;
+						clone.GetComponent<cubescript>().GoGoGo();
 					}
 				}
 			}

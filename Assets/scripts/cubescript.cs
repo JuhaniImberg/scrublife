@@ -12,19 +12,40 @@ public class cubescript : MonoBehaviour
 	private Color startcolor;
 	private float times = 0f;
 
+	private bool AREWEGOING = false;
+
 	void Start ()
+	{
+
+	}
+
+	public void GoGoGo ()
 	{
 		this.deathtime = Time.time + lifespan * lifeticks;
 		this.colortime = Time.time + lifespan;
 		startcolor = this.renderer.material.color;
 		endcolor = new Color (startcolor.r, startcolor.g, startcolor.b, 0.0f);
+		this.AREWEGOING = true;
+	}
+
+	public void StopStopStop ()
+	{
+		this.AREWEGOING = false;
+		Destroy (this.gameObject);
+		//cubepool.Add(this.gameObject);
 	}
 
 	void FixedUpdate ()
 	{
+		if(!this.AREWEGOING) {
+			return;
+		}
 		if (Time.time >= this.deathtime)
 		{
-			Destroy (this.gameObject);
+			this.StopStopStop();
+			//Destroy (this.gameObject);
+			//PoolManager.Despawn(this.gameObject);
+			//this.gameObject.GetComponent<PoolObject>().Despawn();
 			return;
 		}
 		if (Time.time >= this.colortime)

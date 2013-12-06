@@ -277,3 +277,11 @@ MonoBehaviour:
   rotationspeed: 2
   tick: 0
   aliveamount: 0
+  change: 0
+  shouldstrict: 0
+  possible: []
+  selected: 0
+  autorotate: 1
+  autocolor: 1
+  camerarotation: 0
+  colorrotation: 0

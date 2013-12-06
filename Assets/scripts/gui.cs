@@ -7,7 +7,7 @@ public class gui : MonoBehaviour
 	public life lif;
 	int height = 64;
 	int width = 64;
-	int size = 1;
+	int size = 2;
 	float zoom = 1f;
 	bool showgui = true;
 	float fps;
@@ -25,7 +25,7 @@ public class gui : MonoBehaviour
 
 	void StartLife ()
 	{
-		this.lif.Initialize (this.width, this.height, (float)(this.size) / 4);
+		this.lif.Initialize (this.width, this.height, (float)(this.size) / 8);
 	}
 
 	// Update is called once per frame
@@ -83,7 +83,7 @@ public class gui : MonoBehaviour
 
 			for (int i = 0; i < this.lif.possible.Length; i++)
 			{
-				if (GUILayout.Button ((this.lif.selected == i ? ("- " + this.lif.possible [i]) : ("  " + this.lif.possible [i]))))
+				if (GUILayout.Button (this.lif.possible [i], (this.lif.selected == i ?GUI.skin.customStyles [1]:GUI.skin.GetStyle("button"))))
 				{
 					this.lif.selected = i;
 				}
@@ -96,9 +96,14 @@ public class gui : MonoBehaviour
 
 				GUILayout.Label ("Name: " + this.lif.all [this.lif.selected - 1].name);
 				GUILayout.Label ("Author: " + this.lif.all [this.lif.selected - 1].author);
-				GUILayout.Label ("Size: " + this.lif.all [this.lif.selected - 1].cells.GetLength(0) + "x" + this.lif.all [this.lif.selected - 1].cells.GetLength(1));
+				GUILayout.Label ("Size: " + this.lif.all [this.lif.selected - 1].cells.GetLength(0) + "x" + this.lif.all [this.lif.selected - 1].cells.GetLength(1)+" containing "+this.lif.all[this.lif.selected-1].numofcells+" cells");
 				GUILayout.Label (this.lif.all [this.lif.selected - 1].comment);
 
+			} else {
+				GUILayout.Label ("Name: Random");
+				GUILayout.Label ("Author: Your computer");
+				GUILayout.Label ("Size: " +this.width+"x"+this.height+" containing ~"+(this.width*this.height/2)+" cells");
+				GUILayout.Label ("Warning: Might cause lag");
 			}
 
 			GUILayout.FlexibleSpace();
@@ -119,10 +124,10 @@ public class gui : MonoBehaviour
 		GUILayout.Label ("Generation", GUI.skin.customStyles [0]);
 
 		GUILayout.Label ("Area " + this.width + "x" + this.height);
-		this.height = (int)GUILayout.HorizontalSlider ((float)this.height, 8, 64);
+		this.height = (int)GUILayout.HorizontalSlider ((float)this.height, 8, 128);
 		this.width = this.height;
 
-		GUILayout.Label ("Scale " + ((float)(this.size * 4)) / 16);
+		GUILayout.Label ("Scale " + ((float)(this.size * 4)) / 32);
 		this.size = (int)GUILayout.HorizontalSlider ((float)this.size, 1f, 8f);
 
 		this.lif.shouldstrict = !GUILayout.Toggle (!this.lif.shouldstrict, "Wrapping");
