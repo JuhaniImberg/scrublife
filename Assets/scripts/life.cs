@@ -28,6 +28,10 @@ public class life : MonoBehaviour {
 	public int tick;
 	public int aliveamount;
 
+	bool strict = false;
+
+	public bool shouldstrict = false;
+
 	void Start () {
 		this.running = true;
 	}
@@ -49,6 +53,7 @@ public class life : MonoBehaviour {
 		this.tick = 0;
 		this.dirty = true;
 		this.running = true;
+		this.strict = this.shouldstrict;
 	}
 
 	int Mod (int x, int m) {
@@ -56,7 +61,40 @@ public class life : MonoBehaviour {
 		return r<0 ? r+m : r;
 	}
 
-	int Neighbours (int[,] world, int x, int y) {
+	int StrictNeighbours (int[,] world, int x, int y) {
+		int count = 0;
+
+		if(x-1 >= 0) {
+			if(y-1 >= 0) {
+				if(world[x-1, y-1] > 0) { count++; }
+			}
+			if(world[x-1, y] > 0) { count++; }
+			if(y+1 < this.height) {
+				if(world[x-1, y+1] > 0) { count++; }
+			}
+		}
+
+		if(y-1 >= 0) {
+			if(world[x, y-1] > 0) { count++; }
+		}
+		if(y+1 < this.height) {
+			if(world[x, y+1] > 0) { count++; }
+		}
+
+		if(x+1 < this.width) {
+			if(y-1 >= 0) {
+				if(world[x+1, y-1] > 0) { count++; }
+			}
+			if(world[x+1, y] > 0) { count++; }
+			if(y+1 < this.height) {
+				if(world[x+1, y+1] > 0) { count++; }
+			}
+		}
+
+		return count;
+	}
+
+	int FluffyNeighbours (int[,] world, int x, int y) {
 		int count = 0;
 
 		if(world[Mod(x-1, this.width), Mod (y-1, this.height)] > 0) { count++; }
@@ -71,6 +109,10 @@ public class life : MonoBehaviour {
 		if(world[Mod(x+1, this.width), Mod (y+1, this.height)] > 0) { count++; }
 
 		return count;
+	}
+
+	int Neighbours (int[,] world, int x, int y) {
+		return (this.strict?StrictNeighbours(world, x, y):FluffyNeighbours(world, x, y));
 	}
 
 	int Alive() {

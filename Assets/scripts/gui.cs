@@ -53,7 +53,7 @@ public class gui : MonoBehaviour {
 			return;
 		GUI.skin = custom;
 
-		GUILayout.BeginArea(new Rect(5, 5, 280, 438), GUI.skin.GetStyle("Box"));
+		GUILayout.BeginArea(new Rect(5, 5, 280, 458), GUI.skin.GetStyle("Box"));
 
 		/* GENERATION */
 
@@ -65,6 +65,8 @@ public class gui : MonoBehaviour {
 
 		GUILayout.Label("Scale "+((float)(this.size*4))/16);
 		this.size = (int)GUILayout.HorizontalSlider((float)this.size, 1f, 8f);
+
+		this.lif.shouldstrict = !GUILayout.Toggle(!this.lif.shouldstrict, "Wrapping");
 
 		if(GUILayout.Button("Restart (Space)")) {
 			StartLife();
